@@ -13,24 +13,32 @@ app.get('/health', (req, res) => {
 });
 
 app.post('/api/recommend', async (req, res) => {
-  const { mood, energy } = req.body;
+  const { mood, energy, duration, weather, location } = req.body;
 
   if (!mood || !energy) {
     return res.status(400).json({ error: '请提供 mood 和 energy 参数' });
   }
 
-  const validMoods = ['开心', '疲惫', '焦虑'];
+  const validMoods = ['开心', '疲惫', '焦虑', '平静', '兴奋', '无聊'];
   const validEnergies = ['高', '中', '低'];
 
   if (!validMoods.includes(mood)) {
-    return res.status(400).json({ error: '无效的 mood 参数，有效值：开心、疲惫、焦虑' });
+    return res.status(400).json({ error: '无效的 mood 参数，有效值：开心、疲惫、焦虑、平静、兴奋、无聊' });
   }
   if (!validEnergies.includes(energy)) {
     return res.status(400).json({ error: '无效的 energy 参数，有效值：高、中、低' });
   }
 
   try {
-    const results = await queryByMoodAndEnergy(mood, energy);
+    const filters = {};
+    if (duration) filters.duration = duration;
+    if (weather) filters.weather = weather;
+    if (location) filters.location = location;
+
+    let results = await queryByMoodAndEnergy(mood, energy, filters);
+    if (results.length === 0 && (filters.duration || filters.weather || filters.location)) {
+      results = await queryByMoodAndEnergy(mood, energy);
+    }
     res.json({ recommendations: results });
   } catch (err) {
     res.status(500).json({ error: '服务器内部错误' });
