@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { initDatabase, queryByMoodAndEnergy } = require('./database');
+const { initDatabase, queryByMoodAndEnergy, getAllActivities } = require('./database');
 
 const app = express();
 const PORT = 3001;
@@ -32,6 +32,17 @@ app.post('/api/recommend', async (req, res) => {
   try {
     const results = await queryByMoodAndEnergy(mood, energy);
     res.json({ recommendations: results });
+  } catch (err) {
+    res.status(500).json({ error: '服务器内部错误' });
+  }
+});
+
+app.get('/api/random', async (req, res) => {
+  try {
+    const all = await getAllActivities();
+    if (all.length === 0) return res.status(404).json({ error: '暂无活动数据' });
+    const item = all[Math.floor(Math.random() * all.length)];
+    res.json({ recommendation: item });
   } catch (err) {
     res.status(500).json({ error: '服务器内部错误' });
   }

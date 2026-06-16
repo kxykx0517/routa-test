@@ -6,94 +6,473 @@
 <title>情绪推荐系统</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --primary: #7c6ddb;
+    --primary-light: #a99aed;
+    --primary-dark: #5a4bbf;
+    --accent: #f9a8a8;
+    --text-primary: #2d2b4e;
+    --text-secondary: #6b6890;
+    --text-muted: #9d9bb9;
+    --glass-bg: rgba(255, 255, 255, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.8);
+    --glass-shadow: rgba(125, 110, 190, 0.12);
+    --card-shadow: rgba(125, 110, 190, 0.08);
+    --radius: 16px;
+    --radius-sm: 12px;
+    --dopamine-1: #ff6b6b;
+    --dopamine-2: #ffa94d;
+    --dopamine-3: #ffd43b;
+    --dopamine-4: #da77f2;
+  }
+
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: linear-gradient(145deg, #e0e7ff 0%, #f0e6ff 100%);
+  }
+
+  #splash {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    overflow: hidden;
+    transition: opacity .8s ease;
+  }
+  #splash.hidden { opacity: 0; pointer-events: none; }
+
+  #splash video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .splash-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(20, 10, 40, 0.45);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 1;
+  }
+
+  .splash-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 40px;
+    animation: splashIn 1s ease-out;
+  }
+
+  @keyframes splashIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .splash-title {
+    font-size: clamp(42px, 8vw, 72px);
+    font-weight: 900;
+    background: linear-gradient(135deg, #ff6b6b, #ffa94d, #ffd43b, #da77f2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    filter: drop-shadow(0 0 30px rgba(218, 119, 242, 0.3));
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+  }
+
+  .splash-sub {
+    font-size: clamp(16px, 2.5vw, 24px);
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 10px;
+    font-weight: 400;
+  }
+
+  .splash-tagline {
+    font-size: clamp(13px, 1.5vw, 16px);
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 40px;
+    font-weight: 300;
+    letter-spacing: 1px;
+  }
+
+  .splash-btn {
+    display: inline-block;
+    padding: 16px 60px;
+    border: none;
+    border-radius: 50px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(135deg, #ff6b6b, #ffa94d, #ffd43b, #da77f2);
+    background-size: 200% 200%;
+    cursor: pointer;
+    transition: all .3s ease;
+    box-shadow: 0 8px 32px rgba(218, 119, 242, 0.4);
+    letter-spacing: 2px;
+  }
+  .splash-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 40px rgba(218, 119, 242, 0.5);
+    background-position: right center;
+  }
+  .splash-btn:active { transform: scale(.98); }
+
+  #main {
+    position: fixed;
+    inset: 0;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    opacity: 0;
+    transition: opacity .8s ease;
+    pointer-events: none;
+    background: linear-gradient(135deg, #fdfcfb 0%, #fde9e0 30%, #fdd9d6 60%, #f8d5e6 100%);
+  }
+  #main.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .main-header {
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 20px;
+    justify-content: space-between;
+    padding: 12px 20px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    box-shadow: 0 8px 32px var(--glass-shadow);
+    flex-shrink: 0;
+    margin-bottom: 16px;
   }
-  .container {
-    background: #fff;
+
+  .main-header .logo {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text-primary);
+  }
+
+  .fav-header-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    border: 2px solid rgba(124, 109, 219, 0.15);
     border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0,0,0,.15);
-    padding: 40px 32px;
-    max-width: 480px;
-    width: 100%;
-  }
-  h1 {
-    text-align: center;
-    font-size: 24px;
-    color: #333;
-    margin-bottom: 8px;
-  }
-  .subtitle {
-    text-align: center;
-    color: #888;
-    font-size: 14px;
-    margin-bottom: 32px;
-  }
-  .form-group {
-    margin-bottom: 24px;
-  }
-  .form-group label {
-    display: block;
+    background: rgba(255, 255, 255, 0.5);
+    color: var(--text-secondary);
     font-size: 14px;
     font-weight: 600;
-    color: #555;
-    margin-bottom: 10px;
-  }
-  .option-group {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-  .option-group input[type="radio"] { display: none; }
-  .option-group .option {
-    flex: 1;
-    min-width: 80px;
-    text-align: center;
-    padding: 12px 8px;
-    border: 2px solid #e0e0e0;
-    border-radius: 12px;
     cursor: pointer;
-    font-size: 15px;
-    color: #666;
-    transition: all .2s;
-    user-select: none;
-    background: #fafafa;
+    transition: all .25s ease;
   }
-  .option-group .option:hover { border-color: #667eea; background: #f0f0ff; }
-  .option-group input[type="radio"]:checked + .option {
-    border-color: #667eea;
-    background: #667eea;
+  .fav-header-btn:hover {
+    border-color: var(--primary-light);
+    background: rgba(124, 109, 219, 0.06);
+    color: var(--primary);
+    transform: translateY(-1px);
+  }
+  .fav-header-btn.active {
+    border-color: var(--primary);
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
     color: #fff;
   }
-  .btn {
+
+  .main-body {
+    display: flex;
+    gap: 16px;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .left-col {
+    width: 32%;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .right-col {
+    width: 68%;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    box-shadow: 0 4px 16px var(--card-shadow);
+  }
+
+  .glass-card h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+  }
+
+  .btn-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .btn-group .opt-btn {
+    flex: 1;
+    min-width: 60px;
+    padding: 12px 8px;
+    border: 2px solid rgba(124, 109, 219, 0.12);
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all .25s ease;
+    text-align: center;
+    user-select: none;
+  }
+  .btn-group .opt-btn:hover {
+    border-color: var(--primary-light);
+    background: rgba(124, 109, 219, 0.06);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(124, 109, 219, 0.1);
+  }
+  .btn-group .opt-btn.active {
+    border-color: var(--primary);
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(124, 109, 219, 0.3);
+    transform: translateY(-1px);
+  }
+
+  .action-btn {
     width: 100%;
     padding: 14px;
     border: none;
-    border-radius: 12px;
-    font-size: 17px;
-    font-weight: 600;
+    border-radius: var(--radius-sm);
+    font-size: 16px;
+    font-weight: 700;
     cursor: pointer;
-    transition: all .2s;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: #fff;
+    transition: all .3s ease;
+    text-align: center;
   }
-  .btn:hover { opacity: .9; transform: translateY(-1px); }
-  .btn:active { transform: translateY(0); }
-  .btn:disabled {
+  .action-btn.primary {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(124, 109, 219, 0.3);
+  }
+  .action-btn.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(124, 109, 219, 0.4);
+  }
+  .action-btn.primary:disabled {
     opacity: .6;
     cursor: not-allowed;
-    transform: none;
+    transform: none !important;
+    box-shadow: none !important;
   }
+  .action-btn.secondary {
+    background: rgba(255, 255, 255, 0.6);
+    color: var(--text-secondary);
+    border: 2px solid rgba(124, 109, 219, 0.12);
+  }
+  .action-btn.secondary:hover {
+    border-color: var(--primary-light);
+    color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(124, 109, 219, 0.15);
+  }
+
+  .stats-row {
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0;
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+  .stats-row span { display: inline-flex; align-items: center; gap: 4px; }
+
+  .results-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+    padding-right: 4px;
+  }
+
+  .results-grid.empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .empty-state {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 15px;
+    padding: 60px 20px;
+  }
+  .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+
+  .card-wrap { position: relative; }
+
+  .rec-card {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: var(--radius);
+    padding: 16px;
+    cursor: pointer;
+    transition: all .3s ease;
+    box-shadow: 0 4px 16px var(--card-shadow);
+    animation: cardIn .4s ease-out both;
+  }
+  .rec-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px var(--glass-shadow);
+    border-color: rgba(124, 109, 219, 0.2);
+  }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(16px) scale(.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .rec-card:nth-child(1) { animation-delay: 0s; }
+  .rec-card:nth-child(2) { animation-delay: .06s; }
+  .rec-card:nth-child(3) { animation-delay: .12s; }
+  .rec-card:nth-child(4) { animation-delay: .18s; }
+  .rec-card:nth-child(5) { animation-delay: .24s; }
+  .rec-card:nth-child(6) { animation-delay: .3s; }
+
+  .rec-card h4 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+    padding-right: 28px;
+  }
+  .rec-card p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .rec-card .tags {
+    margin-top: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .rec-card .tags span {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    background: rgba(124, 109, 219, 0.06);
+    color: var(--text-muted);
+  }
+  .rec-card .tags .energy-high { background: rgba(245, 158, 11, 0.1); color: #b45309; }
+  .rec-card .tags .energy-mid { background: rgba(16, 185, 129, 0.1); color: #047857; }
+  .rec-card .tags .energy-low { background: rgba(99, 102, 241, 0.08); color: #4338ca; }
+
+  .card-fav-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .25s ease;
+    z-index: 2;
+    color: #ccc;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    line-height: 1;
+  }
+  .card-fav-btn:hover { transform: scale(1.2); color: #e88d8d; }
+  .card-fav-btn.active { color: #e55; }
+  .card-fav-btn.active:hover { color: #d33; }
+
+  .fav-section {
+    display: none;
+    margin-top: 0;
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+  }
+  .fav-section.open { display: block; }
+
+  .fav-card {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: var(--radius);
+    padding: 14px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    box-shadow: 0 4px 16px var(--card-shadow);
+  }
+  .fav-card .info { flex: 1; min-width: 0; }
+  .fav-card .info h4 { font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+  .fav-card .info p { font-size: 13px; color: var(--text-secondary); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .fav-card .info .tags { margin-top: 4px; display: flex; flex-wrap: wrap; gap: 4px; }
+  .fav-card .info .tags span { display: inline-flex; align-items: center; gap: 2px; padding: 2px 8px; border-radius: 20px; font-size: 11px; background: rgba(124, 109, 219, 0.06); color: var(--text-muted); }
+  .fav-card .remove-btn {
+    flex-shrink: 0;
+    width: 28px; height: 28px;
+    border: none; border-radius: 50%;
+    background: rgba(249, 168, 168, 0.1);
+    color: #e88d8d;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .2s ease;
+  }
+  .fav-card .remove-btn:hover { background: #e88d8d; color: #fff; }
+
   .spinner {
     display: inline-block;
-    width: 18px;
-    height: 18px;
+    width: 18px; height: 18px;
     border: 3px solid rgba(255,255,255,.3);
     border-top-color: #fff;
     border-radius: 50%;
@@ -102,103 +481,448 @@
     margin-right: 6px;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
+
   .error {
-    background: #fff0f0;
-    border: 1px solid #ffc0c0;
-    color: #c00;
-    padding: 12px 16px;
-    border-radius: 10px;
-    font-size: 14px;
-    margin-top: 16px;
+    background: rgba(249, 168, 168, 0.15);
+    border: 1px solid var(--accent);
+    color: #b45353;
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
     display: none;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
   }
-  .results { margin-top: 24px; }
-  .results-title {
-    font-size: 16px;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 12px;
+
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(45, 43, 78, 0.45);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    animation: overlayIn .3s ease;
   }
-  .card {
-    border: 1px solid #eee;
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 12px;
-    transition: all .2s;
+  .modal-overlay.open { display: flex; }
+
+  @keyframes overlayIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
-  .card:hover { border-color: #667eea; box-shadow: 0 2px 12px rgba(102,126,234,.1); }
-  .card h3 { font-size: 16px; color: #333; margin-bottom: 6px; }
-  .card p { font-size: 14px; color: #777; line-height: 1.5; }
-  .card .meta { margin-top: 8px; font-size: 13px; color: #999; }
-  .card .meta span { margin-right: 12px; }
-  .empty-state {
-    text-align: center;
-    color: #bbb;
-    padding: 40px 0;
-    font-size: 14px;
+
+  .modal {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: 0 32px 80px rgba(45, 43, 78, 0.25);
+    animation: modalIn .35s ease-out;
+    position: relative;
+    max-height: 80vh;
+    overflow-y: auto;
   }
-  @media (max-width: 480px) {
-    .container { padding: 24px 16px; }
-    h1 { font-size: 20px; }
-    .option-group .option { min-width: 70px; padding: 10px 6px; font-size: 14px; }
-    .btn { font-size: 15px; padding: 12px; }
+
+  @keyframes modalIn {
+    from { opacity: 0; transform: translateY(30px) scale(.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 14px; right: 14px;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(45, 43, 78, 0.06);
+    color: var(--text-secondary);
+    font-size: 22px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .2s ease;
+    z-index: 1;
+    line-height: 1;
+  }
+  .modal-close:hover {
+    background: rgba(45, 43, 78, 0.12);
+    color: var(--text-primary);
+    transform: rotate(90deg);
+  }
+
+  .modal-banner {
+    height: 100px;
+    border-radius: 20px 20px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 42px;
+  }
+  .modal-banner.happy { background: linear-gradient(135deg, #fff0d0, #fde8a0); }
+  .modal-banner.tired { background: linear-gradient(135deg, #e8f0f8, #c8dce8); }
+  .modal-banner.anxious { background: linear-gradient(135deg, #f0e8f8, #dcc8f0); }
+
+  .modal-content { padding: 20px 24px 24px; }
+  .modal-content h2 { font-size: 20px; font-weight: 800; color: var(--text-primary); margin-bottom: 12px; }
+  .modal-section { margin-bottom: 14px; }
+  .modal-section:last-child { margin-bottom: 0; }
+  .modal-section .label { font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+  .modal-section .value { font-size: 15px; color: var(--text-secondary); line-height: 1.6; }
+  .modal-section .tag-group { display: flex; flex-wrap: wrap; gap: 8px; }
+  .modal-section .tag-group .tag { display: inline-flex; align-items: center; gap: 4px; padding: 5px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; background: rgba(124, 109, 219, 0.08); color: var(--primary); }
+  .modal-section .tag-group .tag.energy-high { background: rgba(245, 158, 11, 0.12); color: #b45309; }
+  .modal-section .tag-group .tag.energy-mid { background: rgba(16, 185, 129, 0.12); color: #047857; }
+  .modal-section .tag-group .tag.energy-low { background: rgba(99, 102, 241, 0.1); color: #4338ca; }
+
+  @media (max-width: 768px) {
+    #main { padding: 10px; }
+    .main-body { flex-direction: column; }
+    .left-col { width: 100%; flex-shrink: 0; }
+    .right-col { width: 100%; flex: 1; min-height: 0; }
+    .results-grid { grid-template-columns: 1fr; }
+    .main-header { padding: 10px 14px; }
+    .main-header .logo { font-size: 16px; }
+    .fav-header-btn { padding: 6px 12px; font-size: 12px; }
+    .splash-title { font-size: clamp(32px, 10vw, 48px); }
+    .splash-btn { padding: 14px 40px; font-size: 17px; }
+    .left-col .glass-card { padding: 12px 14px; }
+    .btn-group .opt-btn { padding: 10px 6px; font-size: 13px; min-width: 50px; }
+    .action-btn { padding: 12px; font-size: 14px; }
+  }
+
+  @media (max-height: 650px) {
+    .left-col .glass-card { padding: 10px 12px; }
+    .left-col .glass-card h3 { margin-bottom: 6px; font-size: 13px; }
+    .btn-group .opt-btn { padding: 8px 6px; font-size: 12px; }
+    .action-btn { padding: 10px; font-size: 13px; }
+    .stats-row { font-size: 11px; padding: 4px 0; }
+    .main-header { padding: 8px 16px; margin-bottom: 8px; }
+    .main-body { gap: 8px; }
+    .left-col { gap: 8px; }
+    .rec-card { padding: 12px; }
+    .rec-card h4 { font-size: 13px; }
+    .rec-card p { font-size: 12px; }
   }
 </style>
 </head>
 <body>
-<div class="container">
-  <h1>✨ 情绪推荐</h1>
-  <p class="subtitle">根据你的心情和精力，推荐合适的活动</p>
 
-  <div class="form-group">
-    <label>你的情绪</label>
-    <div class="option-group">
-      <input type="radio" name="mood" id="mood-happy" value="开心">
-      <label class="option" for="mood-happy">😊 开心</label>
-      <input type="radio" name="mood" id="mood-tired" value="疲惫">
-      <label class="option" for="mood-tired">😫 疲惫</label>
-      <input type="radio" name="mood" id="mood-anxious" value="焦虑">
-      <label class="option" for="mood-anxious">😰 焦虑</label>
-    </div>
+<div id="splash">
+  <video autoplay muted loop playsinline>
+    <source src="%E6%8A%BD%E8%B1%A1%E6%83%85%E7%BB%AA%E6%B5%81%E4%BD%93%E8%83%8C%E6%99%AF%E8%A7%86%E9%A2%91%E7%94%9F%E6%88%90.mp4" type="video/mp4">
+  </video>
+  <div class="splash-overlay"></div>
+  <div class="splash-content">
+    <div class="splash-title">情绪推荐</div>
+    <div class="splash-sub">✨ 根据你的状态，发现属于你的活动 ✨</div>
+    <div class="splash-tagline">情绪 · 精力 · 个性化推荐</div>
+    <button class="splash-btn" onclick="goToMain()">开始</button>
+  </div>
+</div>
+
+<div id="main">
+  <div class="main-header">
+    <div class="logo">🌿 休闲推荐</div>
+    <button class="fav-header-btn" id="favToggle" onclick="toggleFavSection()">
+      ⭐ 我的收藏 <span id="favCount">(0)</span>
+    </button>
   </div>
 
-  <div class="form-group">
-    <label>你的精力</label>
-    <div class="option-group">
-      <input type="radio" name="energy" id="energy-high" value="高">
-      <label class="option" for="energy-high">⚡ 高</label>
-      <input type="radio" name="energy" id="energy-mid" value="中">
-      <label class="option" for="energy-mid">🌿 中</label>
-      <input type="radio" name="energy" id="energy-low" value="低">
-      <label class="option" for="energy-low">🛋️ 低</label>
+  <div class="main-body">
+    <div class="left-col">
+      <div class="glass-card">
+        <h3>😊 选择情绪</h3>
+        <div class="btn-group">
+          <button class="opt-btn" data-mood="开心" onclick="setMood(this)">😊 开心</button>
+          <button class="opt-btn" data-mood="疲惫" onclick="setMood(this)">😫 疲惫</button>
+          <button class="opt-btn" data-mood="焦虑" onclick="setMood(this)">😰 焦虑</button>
+        </div>
+      </div>
+
+      <div class="glass-card">
+        <h3>⚡ 精力水平</h3>
+        <div class="btn-group">
+          <button class="opt-btn" data-energy="高" onclick="setEnergy(this)">⚡ 高</button>
+          <button class="opt-btn" data-energy="中" onclick="setEnergy(this)">🌿 中</button>
+          <button class="opt-btn" data-energy="低" onclick="setEnergy(this)">🛋️ 低</button>
+        </div>
+      </div>
+
+      <button class="action-btn primary" id="submitBtn" onclick="getRecommend()">🚀 获取推荐</button>
+      <button class="action-btn secondary" id="randomBtn" onclick="getRandom()">🎲 随机推荐</button>
+
+      <div class="error" id="errorMsg"></div>
+
+      <div class="stats-row">
+        <span>📊 今日已推荐 <strong id="recCount">0</strong> 次</span>
+        <span>⭐ 已收藏 <strong id="statFavCount">0</strong> 个</span>
+      </div>
+    </div>
+
+    <div class="right-col">
+      <div class="fav-section" id="favSection">
+        <div id="favList"></div>
+      </div>
+      <div class="results-grid" id="resultsGrid">
+        <div class="empty-state">
+          <div class="icon">🔮</div>
+          选择情绪和精力后点击推荐
+        </div>
+      </div>
     </div>
   </div>
+</div>
 
-  <button class="btn" id="submitBtn" onclick="getRecommend()">获取推荐</button>
-
-  <div class="error" id="errorMsg"></div>
-
-  <div class="results" id="results" style="display:none">
-    <div class="results-title">推荐活动</div>
-    <div id="cards"></div>
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">&times;</button>
+    <div class="modal-banner" id="modalBanner"></div>
+    <div class="modal-content" id="modalContent"></div>
   </div>
 </div>
 
 <script>
 const API_URL = 'http://localhost:3001/api/recommend';
+const FAV_KEY = 'routa_favorites';
+let selectedMood = null;
+let selectedEnergy = null;
+let recCount = 0;
+
+const MODAL_CLASS_MAP = { '开心': 'happy', '疲惫': 'tired', '焦虑': 'anxious' };
+const ENERGY_TAG_MAP = { '高': 'energy-high', '中': 'energy-mid', '低': 'energy-low' };
+const MOOD_EMOJI = { '开心': '😊', '疲惫': '😫', '焦虑': '😰' };
+const MOOD_SCENARIO = {
+  '开心': '心情愉悦、精力充沛时，适合做一些能延续快乐、释放活力的活动',
+  '疲惫': '身体疲劳、需要恢复时，适合选择舒缓放松、低消耗的活动',
+  '焦虑': '内心不安、需要平静时，适合做能转移注意力、安抚情绪的活动'
+};
+
+function goToMain() {
+  document.getElementById('splash').classList.add('hidden');
+  setTimeout(() => {
+    document.getElementById('splash').style.display = 'none';
+    document.getElementById('main').classList.add('visible');
+  }, 800);
+}
+
+function setMood(btn) {
+  document.querySelectorAll('[data-mood]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedMood = btn.dataset.mood;
+}
+
+function setEnergy(btn) {
+  document.querySelectorAll('[data-energy]').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedEnergy = btn.dataset.energy;
+}
+
+function getFavorites() {
+  try { return JSON.parse(localStorage.getItem(FAV_KEY)) || []; } catch { return []; }
+}
+
+function saveFavorites(list) {
+  localStorage.setItem(FAV_KEY, JSON.stringify(list));
+  updateFavCount();
+}
+
+function isFavorite(id) {
+  return getFavorites().some(f => f._favId === id || f.id === id);
+}
+
+function toggleFavorite(evt, btn) {
+  evt.stopPropagation();
+  const cardWrap = btn.closest('.card-wrap');
+  const card = cardWrap.querySelector('.rec-card');
+  const item = card.__data;
+  if (!item) return;
+
+  let list = getFavorites();
+  const favId = btn.dataset.favid;
+  const idx = list.findIndex(f => f._favId === favId || f.id === favId);
+
+  if (idx > -1) {
+    list.splice(idx, 1);
+    btn.classList.remove('active');
+    btn.textContent = '♡';
+  } else {
+    list.push({ _favId: favId, id: item.id, name: item.name, description: item.description, mood: item.mood, energy: item.energy });
+    btn.classList.add('active');
+    btn.textContent = '♥';
+  }
+
+  saveFavorites(list);
+  renderFavList();
+}
+
+function renderFavList() {
+  const list = getFavorites();
+  const el = document.getElementById('favList');
+
+  if (list.length === 0) {
+    el.innerHTML = '<div class="fav-card"><div class="info"><p style="color:var(--text-muted);text-align:center;padding:8px 0">❤️ 还没有收藏活动</p></div></div>';
+  } else {
+    el.innerHTML = list.map(f => `
+      <div class="fav-card">
+        <div class="info">
+          <h4>${escapeHtml(f.name)}</h4>
+          <p>${escapeHtml(f.description)}</p>
+          <div class="tags">
+            <span>${MOOD_EMOJI[f.mood] || '😊'} ${escapeHtml(f.mood)}</span>
+            <span>⚡ ${escapeHtml(f.energy)}</span>
+          </div>
+        </div>
+        <button class="remove-btn" onclick="removeFav(event,'${escapeHtml(f._favId || f.id)}')">✕</button>
+      </div>
+    `).join('');
+  }
+}
+
+function removeFav(evt, id) {
+  evt.stopPropagation();
+  let list = getFavorites().filter(f => (f._favId !== id && f.id !== id));
+  saveFavorites(list);
+  renderFavList();
+  document.querySelectorAll('.card-fav-btn').forEach(btn => {
+    if (btn.dataset.favid === id) { btn.classList.remove('active'); btn.textContent = '♡'; }
+  });
+}
+
+function updateFavCount() {
+  const count = getFavorites().length;
+  document.getElementById('favCount').textContent = '(' + count + ')';
+  document.getElementById('statFavCount').textContent = count;
+}
+
+function toggleFavSection() {
+  const section = document.getElementById('favSection');
+  const toggle = document.getElementById('favToggle');
+  const grid = document.getElementById('resultsGrid');
+  section.classList.toggle('open');
+  toggle.classList.toggle('active');
+  if (section.classList.contains('open')) {
+    grid.style.display = 'none';
+    renderFavList();
+  } else {
+    grid.style.display = 'grid';
+  }
+}
+
+document.getElementById('resultsGrid').addEventListener('click', e => {
+  const card = e.target.closest('.rec-card');
+  if (!card) return;
+  const item = card.__data;
+  if (!item) return;
+
+  const moodKey = item.mood.includes('开心') ? '开心' : item.mood.includes('疲惫') ? '疲惫' : '焦虑';
+
+  document.getElementById('modalBanner').className = 'modal-banner ' + (MODAL_CLASS_MAP[moodKey] || 'happy');
+  document.getElementById('modalBanner').textContent = MOOD_EMOJI[moodKey] || '😊';
+
+  const duration = item.duration || estimateDuration(item.name, moodKey);
+
+  document.getElementById('modalContent').innerHTML = `
+    <h2>${escapeHtml(item.name)}</h2>
+    <div class="modal-section">
+      <div class="label">📖 活动描述</div>
+      <div class="value">${escapeHtml(item.description)}</div>
+    </div>
+    <div class="modal-section">
+      <div class="label">🎯 适合场景</div>
+      <div class="value">${MOOD_SCENARIO[moodKey] || '适合当前状态的放松活动'}</div>
+    </div>
+    <div class="modal-section">
+      <div class="label">⏱ 预计耗时</div>
+      <div class="value"><strong>${duration}</strong></div>
+    </div>
+    <div class="modal-section">
+      <div class="label">🏷️ 标签</div>
+      <div class="tag-group">
+        <span class="tag">${MOOD_EMOJI[moodKey] || '😊'} ${moodKey}</span>
+        <span class="tag ${ENERGY_TAG_MAP[item.energy] || ''}">⚡ ${escapeHtml(item.energy)}</span>
+        <span class="tag">${getSuitableTime(item.energy)}</span>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('modalOverlay').classList.add('open');
+});
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('modalOverlay').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeModal();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+
+function estimateDuration(name, mood) {
+  const rules = [
+    { kw: ['小睡', '闭目养神'], min: 20, max: 30 },
+    { kw: ['撸猫', '宠物'], min: 10, max: 15 },
+    { kw: ['冥想', '深呼吸'], min: 10, max: 15 },
+    { kw: ['短片', '轻快音乐'], min: 10, max: 15 },
+    { kw: ['听音乐', '听播客', '涂色', '绘画', '阅读'], min: 20, max: 30 },
+    { kw: ['瑜伽', '整理房间', '桌游'], min: 20, max: 30 },
+    { kw: ['跑步', '奔跑', '骑行', '舞蹈', '打篮球'], min: 25, max: 40 },
+    { kw: ['HIIT', '高强度', '拳击', '爬山'], min: 20, max: 30 },
+    { kw: ['烹饪', '美食'], min: 30, max: 45 },
+    { kw: ['电影', '按摩', '温泉'], min: 30, max: 45 },
+    { kw: ['散步', '公园'], min: 15, max: 25 },
+  ];
+  for (const r of rules) {
+    if (r.kw.some(k => name.includes(k))) {
+      return (r.min + Math.floor(Math.random() * (r.max - r.min + 1))) + ' 分钟';
+    }
+  }
+  if (mood === '开心') return (20 + Math.floor(Math.random() * 20)) + ' 分钟';
+  if (mood === '疲惫') return (25 + Math.floor(Math.random() * 20)) + ' 分钟';
+  return (20 + Math.floor(Math.random() * 15)) + ' 分钟';
+}
+
+function getSuitableTime(energy) {
+  const map = { '高': '🌅 上午 / 午后', '中': '☀️ 下午 / 傍晚', '低': '🌙 傍晚 / 睡前' };
+  return map[energy] || '任意时间';
+}
+
+function cardHTML(item, i) {
+  const favId = item.id || ('fav_' + Date.now() + '_' + i);
+  if (!item._favId) item._favId = favId;
+  const liked = isFavorite(favId);
+  const moodKey = item.mood.includes('开心') ? '开心' : item.mood.includes('疲惫') ? '疲惫' : '焦虑';
+  return `
+    <div class="card-wrap">
+      <button class="card-fav-btn${liked ? ' active' : ''}" data-favid="${favId}" onclick="toggleFavorite(event, this)">${liked ? '♥' : '♡'}</button>
+      <div class="rec-card">
+        <h4>${escapeHtml(item.name)}</h4>
+        <p>${escapeHtml(item.description)}</p>
+        <div class="tags">
+          <span>${MOOD_EMOJI[moodKey] || '😊'} ${escapeHtml(item.mood)}</span>
+          <span class="${ENERGY_TAG_MAP[item.energy] || ''}">⚡ ${escapeHtml(item.energy)}</span>
+        </div>
+      </div>
+    </div>`;
+}
 
 async function getRecommend() {
-  const mood = document.querySelector('input[name="mood"]:checked');
-  const energy = document.querySelector('input[name="energy"]:checked');
   const errorEl = document.getElementById('errorMsg');
-  const resultsEl = document.getElementById('results');
-  const cardsEl = document.getElementById('cards');
+  const grid = document.getElementById('resultsGrid');
   const btn = document.getElementById('submitBtn');
 
   errorEl.style.display = 'none';
-  resultsEl.style.display = 'none';
 
-  if (!mood || !energy) {
+  if (!selectedMood || !selectedEnergy) {
     showError('请选择情绪和精力');
     return;
   }
@@ -210,39 +934,71 @@ async function getRecommend() {
     const res = await fetch(API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ mood: mood.value, energy: energy.value })
+      body: JSON.stringify({ mood: selectedMood, energy: selectedEnergy })
     });
 
     if (!res.ok) {
       const errData = await res.json().catch(() => ({}));
-      throw new Error(errData.error || `请求失败 (${res.status})`);
+      throw new Error(errData.error || '请求失败 (' + res.status + ')');
     }
 
     const data = await res.json();
     const items = data.recommendations || [];
+    recCount++;
+    document.getElementById('recCount').textContent = recCount;
 
     if (items.length === 0) {
-      cardsEl.innerHTML = '<div class="empty-state">没有找到匹配的推荐活动</div>';
+      grid.innerHTML = '<div class="empty-state"><div class="icon">🔮</div>没有找到匹配的推荐活动</div>';
+      grid.classList.add('empty');
     } else {
-      cardsEl.innerHTML = items.map(item => `
-        <div class="card">
-          <h3>${escapeHtml(item.name)}</h3>
-          <p>${escapeHtml(item.description)}</p>
-          <div class="meta">
-            ${item.duration ? '<span>⏱ ' + escapeHtml(item.duration) + '</span>' : ''}
-            <span>🏷️ ' + {'开心':'😊','疲惫':'😫','焦虑':'😰'}[item.mood] || item.mood + '</span>
-            <span>⚡ ' + item.energy + '</span>
-          </div>
-        </div>
-      `).join('');
+      grid.classList.remove('empty');
+      grid.innerHTML = items.map((item, i) => {
+        const div = document.createElement('div');
+        div.innerHTML = cardHTML(item, i);
+        return div.innerHTML;
+      }).join('');
+      grid.querySelectorAll('.rec-card').forEach((el, i) => { el.__data = items[i]; });
     }
-
-    resultsEl.style.display = 'block';
   } catch (err) {
     showError(err.message || '网络错误，请检查后端服务是否启动');
   } finally {
     btn.disabled = false;
-    btn.textContent = '获取推荐';
+    btn.innerHTML = '🚀 获取推荐';
+  }
+}
+
+async function getRandom() {
+  const errorEl = document.getElementById('errorMsg');
+  const grid = document.getElementById('resultsGrid');
+  const btn = document.getElementById('randomBtn');
+
+  errorEl.style.display = 'none';
+
+  btn.disabled = true;
+  btn.textContent = '🎲 抽取中...';
+
+  try {
+    const res = await fetch('http://localhost:3001/api/random');
+    if (!res.ok) throw new Error('获取随机推荐失败');
+    const data = await res.json();
+    const item = data.recommendation;
+    recCount++;
+    document.getElementById('recCount').textContent = recCount;
+
+    if (!item) {
+      grid.innerHTML = '<div class="empty-state"><div class="icon">🔮</div>暂无活动数据</div>';
+      grid.classList.add('empty');
+      return;
+    }
+
+    grid.classList.remove('empty');
+    grid.innerHTML = cardHTML(item, 0);
+    grid.querySelector('.rec-card').__data = item;
+  } catch (err) {
+    showError(err.message || '网络错误，请检查后端服务是否启动');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🎲 随机推荐';
   }
 }
 
@@ -257,6 +1013,8 @@ function escapeHtml(str) {
   div.textContent = str;
   return div.innerHTML;
 }
+
+updateFavCount();
 </script>
 </body>
 </html>
