@@ -19,6 +19,18 @@ const activities = [
   { name: '骑行', description: '骑自行车探索城市或乡间小路', mood: '开心', energy: '高' },
   { name: '深呼吸冥想', description: '练习深呼吸技巧，平复焦虑情绪', mood: '焦虑', energy: '低' },
   { name: '桌游', description: '和朋友们一起玩桌游，享受社交乐趣', mood: '开心', energy: '中' },
+  { name: '看喜剧短片', description: '看一段搞笑短片，开怀大笑放松心情（约10分钟）', mood: '开心', energy: '低' },
+  { name: '撸猫/宠物互动', description: '和宠物玩耍互动，感受毛茸茸的治愈力量（约15分钟）', mood: '开心', energy: '低' },
+  { name: '听轻快音乐', description: '聆听节奏轻快的音乐，让好心情延续（约15分钟）', mood: '开心', energy: '低' },
+  { name: '小睡片刻', description: '短暂小睡20-30分钟，快速恢复精力', mood: '疲惫', energy: '高' },
+  { name: '闭目养神', description: '安静地闭眼休息，配合深呼吸放松身心（约20分钟）', mood: '疲惫', energy: '高' },
+  { name: '按摩放松', description: '用泡沫轴或按摩仪放松紧绷的肌肉（约30分钟）', mood: '疲惫', energy: '高' },
+  { name: '拳击/运动发泄', description: '打沙袋或进行拳击训练，痛快释放压力（约30分钟）', mood: '焦虑', energy: '高' },
+  { name: '高强度间歇训练', description: '进行HIIT训练，让汗水带走焦虑情绪（约20分钟）', mood: '焦虑', energy: '高' },
+  { name: '奔跑释放', description: '在户外全力奔跑，感受风的速度和释放感（约25分钟）', mood: '焦虑', energy: '高' },
+  { name: '整理房间', description: '整理和收纳房间，在秩序感中获得平静（约20分钟）', mood: '焦虑', energy: '中' },
+  { name: '涂色/绘画', description: '用填色本或自由涂鸦表达内心，专注当下（约30分钟）', mood: '焦虑', energy: '中' },
+  { name: '听播客', description: '聆听感兴趣的主题播客，转移注意力放松心情（约25分钟）', mood: '焦虑', energy: '中' },
 ];
 
 function initDatabase() {
