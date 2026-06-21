@@ -23,8 +23,6 @@
     --radius-sm: 12px;
   }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     width: 100vw;
@@ -39,6 +37,9 @@
     z-index: 10;
     overflow: hidden;
     transition: opacity .8s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   #splash.hidden { opacity: 0; pointer-events: none; }
 
@@ -65,6 +66,8 @@
     text-align: center;
     padding: 40px;
     animation: splashIn 1s ease-out;
+    width: 100%;
+    max-width: 700px;
   }
 
   @keyframes splashIn {
@@ -253,23 +256,25 @@
   .btn-group .opt-btn {
     flex: 1;
     min-width: 50px;
-    padding: 10px 6px;
+    padding: 14px 8px;
     border: 2px solid rgba(124, 109, 219, 0.12);
     border-radius: var(--radius-sm);
     background: rgba(255, 255, 255, 0.5);
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 600;
     color: var(--text-secondary);
     cursor: pointer;
-    transition: all .25s ease;
+    transition: all .2s ease;
     text-align: center;
     user-select: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
   }
-  .btn-group .opt-btn:hover { border-color: var(--primary-light); background: rgba(124, 109, 219, 0.06); transform: translateY(-1px); }
+  .btn-group .opt-btn:hover { border-color: var(--primary-light); background: rgba(124, 109, 219, 0.06); }
+  .btn-group .opt-btn:active { transform: scale(0.95); }
   .btn-group-2col {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
   }
   .btn-group-2col .opt-btn { min-width: 0; }
 
@@ -299,6 +304,74 @@
   .btn-group-inline .tag-btn:hover { border-color: var(--primary-light); color: var(--primary); }
   .btn-group-inline .tag-btn.active { border-color: var(--primary); background: var(--primary); color: #fff; box-shadow: 0 0 0 2px rgba(124, 109, 219, 0.25); }
 
+  .filter-card { padding: 8px 12px !important; }
+  .filter-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 4px;
+  }
+  .filter-row:last-child { margin-bottom: 0; }
+  .filter-label {
+    font-size: 13px;
+    width: 24px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .filter-tag {
+    padding: 2px 8px;
+    border: 1.5px solid rgba(124, 109, 219, 0.12);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.5);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all .2s ease;
+    user-select: none;
+    white-space: nowrap;
+    font-family: inherit;
+  }
+  .filter-tag:hover { border-color: var(--primary-light); color: var(--primary); }
+  .filter-tag.active { border-color: var(--primary); background: var(--primary); color: #fff; }
+
+  .btn-row {
+    display: flex;
+    gap: 8px;
+  }
+  .btn-row .action-btn { flex: 1; }
+
+  .action-btn.random-suggest {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(245, 87, 108, 0.25);
+  }
+  .action-btn.random-suggest:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(245, 87, 108, 0.35); }
+
+  .quick-entries {
+    display: flex;
+    gap: 8px;
+  }
+  .quick-entry {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 10px 6px;
+    border: 2px solid rgba(124, 109, 219, 0.1);
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.45);
+    cursor: pointer;
+    transition: all .25s ease;
+    font-family: inherit;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  }
+  .quick-entry:hover { border-color: var(--primary-light); background: rgba(124, 109, 219, 0.06); transform: translateY(-2px); }
+  .quick-entry:active { transform: scale(0.97); }
+  .quick-entry .qe-icon { font-size: 22px; }
+  .quick-entry .qe-text { font-size: 11px; font-weight: 600; color: var(--text-secondary); }
+
   .action-btn {
     width: 100%;
     padding: 12px;
@@ -326,37 +399,12 @@
   }
   .stats-row span { display: inline-flex; align-items: center; gap: 4px; }
 
-  .category-bar {
-    display: flex;
-    gap: 6px;
-    overflow-x: auto;
-    padding-bottom: 4px;
-    flex-shrink: 0;
-  }
-  .category-bar .cat-btn {
-    padding: 5px 14px;
-    border: 1.5px solid rgba(124, 109, 219, 0.12);
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.5);
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-muted);
-    cursor: pointer;
-    transition: all .2s ease;
-    user-select: none;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-  .category-bar .cat-btn:hover { border-color: var(--primary-light); color: var(--primary); }
-  .category-bar .cat-btn.active { border-color: var(--primary); background: var(--primary); color: #fff; box-shadow: 0 0 0 2px rgba(124, 109, 219, 0.25); }
-
   .results-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
     flex: 1;
     min-height: 0;
+    overflow-y: auto;
     padding-right: 4px;
     margin-top: 10px;
   }
@@ -371,82 +419,133 @@
   }
   .empty-state .icon { font-size: 42px; margin-bottom: 10px; }
 
-  .card-wrap { position: relative; }
-
-  .rec-card {
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.8);
-    border-radius: var(--radius);
-    padding: 14px;
-    cursor: pointer;
-    transition: all .3s ease;
-    box-shadow: 0 4px 16px var(--card-shadow);
-    animation: cardIn .35s ease-out both;
-  }
-  .rec-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px var(--glass-shadow); border-color: var(--primary-light); }
-
   @keyframes cardIn {
     from { opacity: 0; transform: translateY(12px) scale(.97); }
     to { opacity: 1; transform: translateY(0) scale(1); }
   }
 
-  .rec-card:nth-child(1) { animation-delay: 0s; }
-  .rec-card:nth-child(2) { animation-delay: .05s; }
-  .rec-card:nth-child(3) { animation-delay: .1s; }
-  .rec-card:nth-child(4) { animation-delay: .15s; }
-  .rec-card:nth-child(5) { animation-delay: .2s; }
-  .rec-card:nth-child(6) { animation-delay: .25s; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 
-  .rec-card h4 {
-    font-size: 14px;
-    font-weight: 700;
+  .single-card {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: var(--radius);
+    padding: 22px;
+    box-shadow: 0 8px 32px var(--glass-shadow);
+    animation: fadeIn 0.3s ease-out;
+    position: relative;
+    width: 100%;
+  }
+
+  .single-card.fade-out {
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+
+  .single-card.fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .single-card .card-title {
+    font-size: 20px;
+    font-weight: 800;
     color: var(--text-primary);
-    margin-bottom: 5px;
-    padding-right: 26px;
+    margin-bottom: 2px;
+    padding-right: 36px;
   }
-  .rec-card p {
+
+  .single-card .card-category {
     font-size: 12px;
-    color: var(--text-secondary);
-    line-height: 1.5;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-bottom: 12px;
   }
-  .rec-card .tags {
-    margin-top: 6px;
+
+  .single-card .card-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+
+  .single-card .card-section {
+    margin-bottom: 14px;
+  }
+  .single-card .card-section:last-child { margin-bottom: 0; }
+
+  .single-card .card-section .section-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    margin-bottom: 3px;
     display: flex;
-    flex-wrap: wrap;
+    align-items: center;
     gap: 4px;
   }
-  .rec-card .tags span {
+
+  .single-card .card-section .section-value {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .single-card .card-section ol,
+  .single-card .card-section ul {
+    margin: 0;
+    padding-left: 20px;
+  }
+  .single-card .card-section ol li,
+  .single-card .card-section ul li {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 3px;
+  }
+
+  .single-card .tags-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(124, 109, 219, 0.1);
+  }
+
+  .single-card .tags-row .tag {
     display: inline-flex;
     align-items: center;
-    gap: 2px;
-    padding: 2px 8px;
+    gap: 3px;
+    padding: 4px 12px;
     border-radius: 20px;
-    font-size: 11px;
-    background: rgba(124, 109, 219, 0.06);
-    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 500;
+    background: rgba(124, 109, 219, 0.08);
+    color: var(--primary);
   }
-  .rec-card .tags .energy-high { background: rgba(245, 158, 11, 0.1); color: #b45309; }
-  .rec-card .tags .energy-mid { background: rgba(16, 185, 129, 0.1); color: #047857; }
-  .rec-card .tags .energy-low { background: rgba(99, 102, 241, 0.08); color: #4338ca; }
+  .single-card .tags-row .tag.energy-high { background: rgba(245, 158, 11, 0.12); color: #b45309; }
+  .single-card .tags-row .tag.energy-mid { background: rgba(16, 185, 129, 0.12); color: #047857; }
+  .single-card .tags-row .tag.energy-low { background: rgba(99, 102, 241, 0.1); color: #4338ca; }
 
-  .card-fav-btn {
+  .single-card .card-fav-btn {
     position: absolute;
-    top: 6px;
-    right: 6px;
-    width: 30px;
-    height: 30px;
+    top: 14px;
+    right: 14px;
+    width: 34px;
+    height: 34px;
     border: none;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
-    font-size: 15px;
+    font-size: 18px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -457,9 +556,50 @@
     box-shadow: 0 2px 8px rgba(0,0,0,.06);
     line-height: 1;
   }
-  .card-fav-btn:hover { transform: scale(1.2); color: #e88d8d; }
-  .card-fav-btn.active { color: #e55; }
-  .card-fav-btn.active:hover { color: #d33; }
+  .single-card .card-fav-btn:hover { transform: scale(1.2); color: #e88d8d; }
+  .single-card .card-fav-btn.active { color: #e55; }
+  .single-card .card-fav-btn.active:hover { color: #d33; }
+
+  .nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 12px;
+    padding: 0 2px;
+    flex-shrink: 0;
+  }
+
+  .nav-btn {
+    padding: 10px 24px;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .25s ease;
+    min-width: 100px;
+    text-align: center;
+  }
+  .nav-btn.prev {
+    background: rgba(255, 255, 255, 0.5);
+    color: var(--text-secondary);
+    border: 2px solid rgba(124, 109, 219, 0.12);
+  }
+  .nav-btn.prev:hover:not(.disabled) { border-color: var(--primary-light); color: var(--primary); transform: translateY(-1px); }
+  .nav-btn.prev.disabled { opacity: .4; cursor: not-allowed; transform: none; }
+  .nav-btn.next {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(124, 109, 219, 0.25);
+  }
+  .nav-btn.next:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(124, 109, 219, 0.35); }
+  .nav-btn.next:disabled { opacity: .6; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  .nav-progress {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
 
   .fav-section, .diary-section {
     display: none;
@@ -595,116 +735,105 @@
     font-size: 12px;
     display: none;
     backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   }
 
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 1000;
-    background: rgba(45, 43, 78, 0.45);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    justify-content: center;
+  /* ===== Layer 1: Quick Entry Cards ===== */
+  .quick-card-grp h3 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+  }
+  .quick-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .qe-card {
+    display: flex;
     align-items: center;
-    padding: 20px;
-    animation: overlayIn .3s ease;
-  }
-  .modal-overlay.open { display: flex; }
-
-  @keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
-
-  .modal {
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.8);
-    border-radius: 20px;
-    max-width: 440px;
-    width: 100%;
-    box-shadow: 0 32px 80px rgba(45, 43, 78, 0.25);
-    animation: modalIn .35s ease-out;
-    position: relative;
-    max-height: 80vh;
-    overflow-y: auto;
-  }
-
-  @keyframes modalIn { from { opacity: 0; transform: translateY(30px) scale(.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
-
-  .modal-close {
-    position: absolute;
-    top: 14px; right: 14px;
-    width: 36px; height: 36px;
-    border-radius: 50%;
-    border: none;
-    background: rgba(45, 43, 78, 0.06);
-    color: var(--text-secondary);
-    font-size: 22px;
+    gap: 6px;
+    padding: 12px 10px;
+    border: 2px solid rgba(124, 109, 219, 0.1);
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.45);
     cursor: pointer;
+    transition: all .25s ease;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    text-align: left;
+    user-select: none;
+  }
+  .qe-card:hover { border-color: var(--primary-light); background: rgba(124, 109, 219, 0.06); transform: translateY(-2px); }
+  .qe-card:active { transform: scale(0.97); }
+
+  /* ===== Layer 2: Tag Cloud ===== */
+  .tag-cloud {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .tag-item {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 2px solid rgba(124, 109, 219, 0.12);
+    background: rgba(255, 255, 255, 0.5);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
     transition: all .2s ease;
-    z-index: 1;
-    line-height: 1;
+    user-select: none;
+    color: var(--text-secondary);
+    font-family: inherit;
+    line-height: 1.3;
   }
-  .modal-close:hover { background: rgba(45, 43, 78, 0.12); color: var(--text-primary); transform: rotate(90deg); }
+  .tag-item:hover { border-color: var(--primary-light); color: var(--primary); }
+  .tag-item.mood.active { border-color: #6C63FF; background: rgba(108,99,255,0.15); color: #6C63FF; box-shadow: 0 0 12px rgba(108,99,255,0.2); }
+  .tag-item.energy.active[data-value="高"] { border-color: #FF6B6B; background: rgba(255,107,107,0.15); color: #FF6B6B; box-shadow: 0 0 12px rgba(255,107,107,0.2); }
+  .tag-item.energy.active[data-value="中"] { border-color: #FFB347; background: rgba(255,179,71,0.15); color: #FFB347; box-shadow: 0 0 12px rgba(255,179,71,0.2); }
+  .tag-item.energy.active[data-value="低"] { border-color: #4ECDC4; background: rgba(78,205,196,0.15); color: #4ECDC4; box-shadow: 0 0 12px rgba(78,205,196,0.2); }
+  .tag-item.filter.active { border-color: var(--primary); background: rgba(124,109,219,0.15); color: var(--primary); box-shadow: 0 0 12px rgba(124,109,219,0.2); }
 
-  .modal-banner {
-    height: 90px;
-    border-radius: 20px 20px 0 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 38px;
-  }
-  .modal-banner.happy { background: linear-gradient(135deg, #fff0d0, #fde8a0); }
-  .modal-banner.tired { background: linear-gradient(135deg, #e8f0f8, #c8dce8); }
-  .modal-banner.anxious { background: linear-gradient(135deg, #f0e8f8, #dcc8f0); }
-  .modal-banner.calm { background: linear-gradient(135deg, #e0f0e8, #b8d8cc); }
-  .modal-banner.excited { background: linear-gradient(135deg, #ffe0d0, #fcc8a0); }
-  .modal-banner.bored { background: linear-gradient(135deg, #e8e0f0, #d0c8e0); }
-
-  .modal-content { padding: 18px 22px 22px; }
-  .modal-content h2 { font-size: 19px; font-weight: 800; color: var(--text-primary); margin-bottom: 10px; }
-  .modal-section { margin-bottom: 12px; }
-  .modal-section:last-child { margin-bottom: 0; }
-  .modal-section .label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 3px; }
-  .modal-section .value { font-size: 14px; color: var(--text-secondary); line-height: 1.6; white-space: pre-wrap; }
-  .modal-section .tag-group { display: flex; flex-wrap: wrap; gap: 6px; }
-  .modal-section .tag-group .tag { display: inline-flex; align-items: center; gap: 3px; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; background: rgba(124, 109, 219, 0.08); color: var(--primary); }
-  .modal-section .tag-group .tag.energy-high { background: rgba(245, 158, 11, 0.12); color: #b45309; }
-  .modal-section .tag-group .tag.energy-mid { background: rgba(16, 185, 129, 0.12); color: #047857; }
-  .modal-section .tag-group .tag.energy-low { background: rgba(99, 102, 241, 0.1); color: #4338ca; }
-
+  /* ===== Responsive ===== */
   @media (max-width: 768px) {
     #main { padding: 8px; }
     .main-body { flex-direction: column; }
     .left-col { width: 100%; flex-shrink: 0; }
     .right-col { width: 100%; flex: 1; min-height: 0; }
-    .results-grid { grid-template-columns: 1fr; }
     .main-header { padding: 8px 12px; }
     .main-header .logo { font-size: 15px; }
     .header-btn { padding: 4px 10px; font-size: 12px; }
     .splash-title { font-size: clamp(32px, 10vw, 48px); }
     .splash-btn { padding: 14px 40px; font-size: 17px; }
-    .btn-group-2col { grid-template-columns: 1fr 1fr 1fr; }
     .glass-card { padding: 10px 12px; }
     .glass-card h3 { font-size: 12px; }
+    .single-card { padding: 16px; }
+    .single-card .card-title { font-size: 17px; }
+    .nav-btn { padding: 8px 16px; min-width: 80px; font-size: 13px; }
+    .tag-item { font-size: 12px; padding: 5px 10px; }
+    .qe-card { padding: 10px 8px; font-size: 13px; }
   }
 
   @media (max-height: 650px) {
     .left-col .glass-card { padding: 8px 10px; }
     .left-col .glass-card h3 { margin-bottom: 4px; font-size: 12px; }
-    .btn-group .opt-btn { padding: 7px 5px; font-size: 12px; }
     .action-btn { padding: 9px; font-size: 13px; }
     .stats-row { font-size: 11px; padding: 3px 0; }
     .main-header { padding: 6px 14px; margin-bottom: 6px; }
     .main-body { gap: 6px; }
     .left-col { gap: 6px; }
-    .rec-card { padding: 10px; }
-    .rec-card h4 { font-size: 12px; }
+    .single-card { padding: 12px; }
+    .single-card .card-title { font-size: 15px; }
+    .single-card .card-desc { font-size: 13px; }
+    .single-card .card-section .section-value { font-size: 13px; }
+    .tag-cloud { gap: 5px; margin-bottom: 8px; }
+    .tag-item { font-size: 11px; padding: 4px 8px; }
+    .qe-card { padding: 8px 6px; font-size: 12px; }
   }
 </style>
 </head>
@@ -735,60 +864,47 @@
 
   <div class="main-body">
     <div class="left-col">
-      <div class="glass-card">
-        <h3>😊 选择情绪</h3>
-        <div class="btn-group-2col" id="moodGroup">
-          <button class="opt-btn" data-mood="开心" onclick="setMood(this)">😊 开心</button>
-          <button class="opt-btn" data-mood="疲惫" onclick="setMood(this)">😫 疲惫</button>
-          <button class="opt-btn" data-mood="焦虑" onclick="setMood(this)">😰 焦虑</button>
-          <button class="opt-btn" data-mood="平静" onclick="setMood(this)">😌 平静</button>
-          <button class="opt-btn" data-mood="兴奋" onclick="setMood(this)">🤩 兴奋</button>
-          <button class="opt-btn" data-mood="无聊" onclick="setMood(this)">😐 无聊</button>
+
+      <!-- Layer 1: Conversation-style Quick Entry -->
+      <div class="glass-card quick-card-grp">
+        <h3>今天想怎么放松？</h3>
+        <div class="quick-grid">
+          <button class="qe-card" onclick="quickEntry('happy')">😊 开心出门</button>
+          <button class="qe-card" onclick="quickEntry('home')">😫 在家躺平</button>
+          <button class="qe-card" onclick="quickEntry('vent')">😰 发泄一下</button>
+          <button class="qe-card" onclick="quickEntry('challenge')">🤩 挑战自己</button>
         </div>
       </div>
 
+      <!-- Layer 2: Tag Cloud -->
       <div class="glass-card">
-        <h3>⚡ 精力水平</h3>
-        <div class="btn-group" id="energyGroup">
-          <button class="opt-btn" data-energy="高" onclick="setEnergy(this)">⚡ 高</button>
-          <button class="opt-btn" data-energy="中" onclick="setEnergy(this)">🌿 中</button>
-          <button class="opt-btn" data-energy="低" onclick="setEnergy(this)">🛋️ 低</button>
+        <div class="tag-cloud" id="tagCloud">
+          <button class="tag-item mood" data-type="mood" data-value="开心" onclick="toggleTag(this)">😊开心</button>
+          <button class="tag-item mood" data-type="mood" data-value="疲惫" onclick="toggleTag(this)">😫疲惫</button>
+          <button class="tag-item mood" data-type="mood" data-value="焦虑" onclick="toggleTag(this)">😰焦虑</button>
+          <button class="tag-item mood" data-type="mood" data-value="平静" onclick="toggleTag(this)">😌平静</button>
+          <button class="tag-item mood" data-type="mood" data-value="兴奋" onclick="toggleTag(this)">🤩兴奋</button>
+          <button class="tag-item mood" data-type="mood" data-value="无聊" onclick="toggleTag(this)">😑无聊</button>
+          <button class="tag-item energy" data-type="energy" data-value="高" onclick="toggleTag(this)">⚡高</button>
+          <button class="tag-item energy" data-type="energy" data-value="中" onclick="toggleTag(this)">🌿中</button>
+          <button class="tag-item energy" data-type="energy" data-value="低" onclick="toggleTag(this)">🛋️低</button>
+          <button class="tag-item filter" data-type="duration" data-value="不限" onclick="toggleTag(this)">⏰不限</button>
+          <button class="tag-item filter" data-type="duration" data-value="5分钟" onclick="toggleTag(this)">⏰5m</button>
+          <button class="tag-item filter" data-type="duration" data-value="15分钟" onclick="toggleTag(this)">⏰15m</button>
+          <button class="tag-item filter" data-type="duration" data-value="30分钟" onclick="toggleTag(this)">⏰30m</button>
+          <button class="tag-item filter" data-type="duration" data-value="1小时以上" onclick="toggleTag(this)">⏰1h+</button>
+          <button class="tag-item filter" data-type="weather" data-value="不限" onclick="toggleTag(this)">☀️不限</button>
+          <button class="tag-item filter" data-type="weather" data-value="晴天" onclick="toggleTag(this)">☀️晴天</button>
+          <button class="tag-item filter" data-type="weather" data-value="下雨" onclick="toggleTag(this)">🌧️下雨</button>
+          <button class="tag-item filter" data-type="weather" data-value="阴天" onclick="toggleTag(this)">☁️阴天</button>
+          <button class="tag-item filter" data-type="location" data-value="不限" onclick="toggleTag(this)">📍不限</button>
+          <button class="tag-item filter" data-type="location" data-value="室内" onclick="toggleTag(this)">📍室内</button>
+          <button class="tag-item filter" data-type="location" data-value="室外" onclick="toggleTag(this)">🌳室外</button>
+          <button class="tag-item filter" data-type="location" data-value="在家" onclick="toggleTag(this)">🏠在家</button>
         </div>
+        <button class="action-btn primary" id="submitBtn" onclick="getRecommend()">🚀 获取推荐</button>
+        <button class="action-btn secondary" id="browseBtn" onclick="startBrowse()" style="margin-top:8px">👀 随便看看</button>
       </div>
-
-      <div class="glass-card">
-        <h3>⏱ 时间</h3>
-        <div class="btn-group-inline" id="durationGroup">
-          <button class="tag-btn active" data-filter="duration" data-value="不限" onclick="setFilter(this)">不限</button>
-          <button class="tag-btn" data-filter="duration" data-value="5分钟" onclick="setFilter(this)">5分钟</button>
-          <button class="tag-btn" data-filter="duration" data-value="15分钟" onclick="setFilter(this)">15分钟</button>
-          <button class="tag-btn" data-filter="duration" data-value="30分钟" onclick="setFilter(this)">30分钟</button>
-          <button class="tag-btn" data-filter="duration" data-value="1小时以上" onclick="setFilter(this)">1小时+</button>
-        </div>
-      </div>
-
-      <div class="glass-card">
-        <h3>🌤️ 天气</h3>
-        <div class="btn-group-inline" id="weatherGroup">
-          <button class="tag-btn active" data-filter="weather" data-value="不限" onclick="setFilter(this)">不限</button>
-          <button class="tag-btn" data-filter="weather" data-value="晴天" onclick="setFilter(this)">☀️ 晴天</button>
-          <button class="tag-btn" data-filter="weather" data-value="下雨" onclick="setFilter(this)">🌧️ 下雨</button>
-          <button class="tag-btn" data-filter="weather" data-value="阴天" onclick="setFilter(this)">☁️ 阴天</button>
-        </div>
-      </div>
-
-      <div class="glass-card">
-        <h3>📍 地点</h3>
-        <div class="btn-group-inline" id="locationGroup">
-          <button class="tag-btn active" data-filter="location" data-value="不限" onclick="setFilter(this)">不限</button>
-          <button class="tag-btn" data-filter="location" data-value="室内" onclick="setFilter(this)">🏠 室内</button>
-          <button class="tag-btn" data-filter="location" data-value="室外" onclick="setFilter(this)">🌳 室外</button>
-          <button class="tag-btn" data-filter="location" data-value="在家" onclick="setFilter(this)">🛋️ 在家</button>
-        </div>
-      </div>
-
-      <button class="action-btn primary" id="submitBtn" onclick="getRecommend()">🚀 获取推荐</button>
-      <button class="action-btn secondary" id="randomBtn" onclick="getRandom()">🎲 随机推荐</button>
 
       <div class="error" id="errorMsg"></div>
 
@@ -846,32 +962,20 @@
       </div>
 
       <div id="rightContent">
-        <div class="category-bar" id="categoryBar">
-          <button class="cat-btn active" data-category="全部" onclick="setCategory(this)">🏃 全部</button>
-          <button class="cat-btn" data-category="运动类" onclick="setCategory(this)">运动类</button>
-          <button class="cat-btn" data-category="艺术类" onclick="setCategory(this)">艺术类</button>
-          <button class="cat-btn" data-category="放松类" onclick="setCategory(this)">放松类</button>
-          <button class="cat-btn" data-category="生活类" onclick="setCategory(this)">生活类</button>
-          <button class="cat-btn" data-category="娱乐类" onclick="setCategory(this)">娱乐类</button>
-          <button class="cat-btn" data-category="自然类" onclick="setCategory(this)">自然类</button>
-        </div>
-        <div class="hint-text" id="hintText">💡 点击卡片查看活动详情</div>
+        <div class="hint-text" id="hintText">💡 使用「上一个」「下一个」浏览推荐</div>
         <div class="results-grid" id="resultsGrid">
           <div class="empty-state">
             <div class="icon">🔮</div>
             选择情绪和精力后点击推荐
           </div>
         </div>
+        <div class="nav-bar" id="navBar" style="display:none">
+          <button class="nav-btn prev disabled" id="prevBtn" onclick="prevCard()">◀ 上一个</button>
+          <span class="nav-progress" id="navProgress">第 0 个 / 共 0 个</span>
+          <button class="nav-btn next" id="nextBtn" onclick="nextCard()">下一个 ▶</button>
+        </div>
       </div>
     </div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal">
-    <button class="modal-close" id="modalClose">&times;</button>
-    <div class="modal-banner" id="modalBanner"></div>
-    <div class="modal-content" id="modalContent"></div>
   </div>
 </div>
 
@@ -882,15 +986,16 @@ const DIARY_KEY = 'routa_diaries';
 const QUOTE_KEY = 'routa_quote';
 let selectedMood = null;
 let selectedEnergy = null;
-let selectedCategory = '全部';
 let recCount = 0;
 let diaryMood = null;
 let diaryEnergy = null;
 let currentQuoteIdx = null;
+let results = [];
+let currentIndex = 0;
+let autoTriggerTimer = null;
 
 const filters = { duration: '不限', weather: '不限', location: '不限' };
 
-const MODAL_CLASS_MAP = { '开心': 'happy', '疲惫': 'tired', '焦虑': 'anxious', '平静': 'calm', '兴奋': 'excited', '无聊': 'bored' };
 const ENERGY_TAG_MAP = { '高': 'energy-high', '中': 'energy-mid', '低': 'energy-low' };
 const MOOD_EMOJI = { '开心': '😊', '疲惫': '😫', '焦虑': '😰', '平静': '😌', '兴奋': '🤩', '无聊': '😐' };
 
@@ -972,32 +1077,28 @@ function goToMain() {
   }, 800);
 }
 
-function setMood(btn) {
-  document.querySelectorAll('#moodGroup .opt-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  selectedMood = btn.dataset.mood;
-}
-
-function setEnergy(btn) {
-  document.querySelectorAll('#energyGroup .opt-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  selectedEnergy = btn.dataset.energy;
-}
-
-function setFilter(btn) {
-  const group = btn.parentElement;
-  const filter = btn.dataset.filter;
+function toggleTag(btn) {
+  const type = btn.dataset.type;
   const value = btn.dataset.value;
-  group.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  filters[filter] = value;
-}
 
-function setCategory(btn) {
-  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  selectedCategory = btn.dataset.category;
-  applyCategoryFilter();
+  if (type === 'mood') {
+    document.querySelectorAll('.tag-item[data-type="mood"]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedMood = value;
+  } else if (type === 'energy') {
+    document.querySelectorAll('.tag-item[data-type="energy"]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedEnergy = value;
+  } else {
+    document.querySelectorAll('.tag-item[data-type="' + type + '"]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    filters[type] = value;
+  }
+
+  clearTimeout(autoTriggerTimer);
+  if (selectedMood && selectedEnergy) {
+    autoTriggerTimer = setTimeout(() => { getRecommend(); }, 350);
+  }
 }
 
 function getFavorites() {
@@ -1015,8 +1116,8 @@ function isFavorite(id) {
 
 function toggleFavorite(evt, btn) {
   evt.stopPropagation();
-  const cardWrap = btn.closest('.card-wrap');
-  const card = cardWrap.querySelector('.rec-card');
+  const card = btn.closest('.single-card');
+  if (!card) return;
   const item = card.__data;
   if (!item) return;
 
@@ -1068,6 +1169,7 @@ function removeFav(evt, id) {
   document.querySelectorAll('.card-fav-btn').forEach(btn => {
     if (btn.dataset.favid === id) { btn.classList.remove('active'); btn.textContent = '♡'; }
   });
+  if (results.length > 0) renderCurrentCard();
 }
 
 function updateFavCount() {
@@ -1092,83 +1194,6 @@ function toggleFavSection() {
     content.style.minHeight = '0';
   }
 }
-
-function applyCategoryFilter() {
-  const grid = document.getElementById('resultsGrid');
-  const cards = grid.querySelectorAll('.card-wrap');
-  cards.forEach(w => {
-    const cat = w.querySelector('.rec-card').dataset.category;
-    if (selectedCategory === '全部' || cat === selectedCategory) {
-      w.style.display = '';
-    } else {
-      w.style.display = 'none';
-    }
-  });
-}
-
-document.getElementById('resultsGrid').addEventListener('click', e => {
-  const card = e.target.closest('.rec-card');
-  if (!card) return;
-  const item = card.__data;
-  if (!item) return;
-
-  const moodKey = item.mood.includes('开心') ? '开心' : item.mood.includes('疲惫') ? '疲惫' : item.mood.includes('焦虑') ? '焦虑' : item.mood.includes('平静') ? '平静' : item.mood.includes('兴奋') ? '兴奋' : '无聊';
-
-  document.getElementById('modalBanner').className = 'modal-banner ' + (MODAL_CLASS_MAP[moodKey] || 'happy');
-  document.getElementById('modalBanner').textContent = MOOD_EMOJI[moodKey] || '😊';
-
-  const steps = item.steps || '暂无步骤';
-  const materials = item.materials || '无特殊材料';
-  const tips = item.tips || '无特殊注意事项';
-  const duration = item.duration || estimateDuration(item.name, moodKey);
-
-  document.getElementById('modalContent').innerHTML = `
-    <h2>${escapeHtml(item.name)}</h2>
-    <div class="modal-section">
-      <div class="label">📖 描述</div>
-      <div class="value">${escapeHtml(item.description)}</div>
-    </div>
-    <div class="modal-section">
-      <div class="label">📝 步骤</div>
-      <div class="value">${escapeHtml(steps)}</div>
-    </div>
-    <div class="modal-section">
-      <div class="label">🎒 所需材料</div>
-      <div class="value">${escapeHtml(materials)}</div>
-    </div>
-    <div class="modal-section">
-      <div class="label">⚠️ 注意事项</div>
-      <div class="value">${escapeHtml(tips)}</div>
-    </div>
-    <div class="modal-section">
-      <div class="label">⏱ 预计耗时</div>
-      <div class="value"><strong>${escapeHtml(duration)}</strong></div>
-    </div>
-    <div class="modal-section">
-      <div class="label">🏷️ 标签</div>
-      <div class="tag-group">
-        <span class="tag">${MOOD_EMOJI[moodKey] || '😊'} ${moodKey}</span>
-        <span class="tag ${ENERGY_TAG_MAP[item.energy] || ''}">⚡ ${escapeHtml(item.energy)}</span>
-        <span class="tag">${escapeHtml(item.category || '未分类')}</span>
-        <span class="tag">${getSuitableTime(item.energy)}</span>
-      </div>
-    </div>
-  `;
-
-  document.getElementById('modalOverlay').classList.add('open');
-});
-
-function closeModal() {
-  document.getElementById('modalOverlay').classList.remove('open');
-}
-
-document.getElementById('modalClose').addEventListener('click', closeModal);
-document.getElementById('modalOverlay').addEventListener('click', e => {
-  if (e.target === e.currentTarget) closeModal();
-});
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeModal();
-});
 
 function estimateDuration(name, mood) {
   const rules = [
@@ -1199,23 +1224,152 @@ function getSuitableTime(energy) {
   return map[energy] || '任意时间';
 }
 
-function cardHTML(item, i) {
-  const favId = item.id || ('fav_' + Date.now() + '_' + i);
+function formatField(text, fallback) {
+  if (!text || text === '暂无步骤' || text === '无特殊材料' || text === '无特殊注意事项') {
+    return '<em style="color:var(--text-muted)">' + fallback + '</em>';
+  }
+  const lines = text.split('\n').filter(l => l.trim());
+  if (lines.length > 1) {
+    const isNumbered = lines.some(l => /^\d+[\.\)]/.test(l.trim()));
+    if (isNumbered) {
+      return '<ol>' + lines.map(l => '<li>' + escapeHtml(l.replace(/^\d+[\.\)]\s*/, '')) + '</li>').join('') + '</ol>';
+    }
+    return '<ul>' + lines.map(l => '<li>' + escapeHtml(l.trim()) + '</li>').join('') + '</ul>';
+  }
+  const parts = text.split(/(?=\d+[\.\)])/).filter(p => p.trim());
+  if (parts.length > 1) {
+    return '<ol>' + parts.map(p => '<li>' + escapeHtml(p.replace(/^\d+[\.\)]\s*/, '')) + '</li>').join('') + '</ol>';
+  }
+  return escapeHtml(text);
+}
+
+function renderCurrentCard() {
+  const grid = document.getElementById('resultsGrid');
+  const navBar = document.getElementById('navBar');
+
+  if (!results || results.length === 0) {
+    grid.innerHTML = '<div class="empty-state"><div class="icon">🔮</div>没有找到匹配的推荐活动</div>';
+    grid.classList.add('empty');
+    navBar.style.display = 'none';
+    return;
+  }
+
+  grid.classList.remove('empty');
+  const item = results[currentIndex];
+  if (!item) return;
+
+  const moodKey = item.mood.includes('开心') ? '开心' : item.mood.includes('疲惫') ? '疲惫' : item.mood.includes('焦虑') ? '焦虑' : item.mood.includes('平静') ? '平静' : item.mood.includes('兴奋') ? '兴奋' : '无聊';
+  const duration = item.duration || estimateDuration(item.name, moodKey);
+  const favId = item._favId || item.id || ('fav_' + Date.now());
   if (!item._favId) item._favId = favId;
   const liked = isFavorite(favId);
-  const moodKey = item.mood.includes('开心') ? '开心' : item.mood.includes('疲惫') ? '疲惫' : item.mood.includes('焦虑') ? '焦虑' : item.mood.includes('平静') ? '平静' : item.mood.includes('兴奋') ? '兴奋' : '无聊';
-  return `
-    <div class="card-wrap">
-      <button class="card-fav-btn${liked ? ' active' : ''}" data-favid="${favId}" onclick="toggleFavorite(event, this)">${liked ? '♥' : '♡'}</button>
-      <div class="rec-card" data-category="${escapeHtml(item.category || '')}">
-        <h4>${escapeHtml(item.name)}</h4>
-        <p>${escapeHtml(item.description)}</p>
-        <div class="tags">
-          <span>${MOOD_EMOJI[moodKey] || '😊'} ${escapeHtml(item.mood)}</span>
-          <span class="${ENERGY_TAG_MAP[item.energy] || ''}">⚡ ${escapeHtml(item.energy)}</span>
-        </div>
-      </div>
-    </div>`;
+
+  const stepsHtml = formatField(item.steps, '暂无详细步骤');
+  const materialsHtml = formatField(item.materials, '无特殊材料');
+  const tipsHtml = formatField(item.tips, '无特殊注意事项');
+
+  grid.innerHTML =
+    '<div class="single-card" data-category="' + escapeHtml(item.category || '') + '">' +
+      '<button class="card-fav-btn' + (liked ? ' active' : '') + '" data-favid="' + favId + '" onclick="toggleFavorite(event, this)">' + (liked ? '♥' : '♡') + '</button>' +
+      '<div class="card-title">' + escapeHtml(item.name) + '</div>' +
+      '<div class="card-category">' + escapeHtml(item.category || '未分类') + '</div>' +
+      '<div class="card-desc">' + escapeHtml(item.description) + '</div>' +
+      '<div class="card-section">' +
+        '<div class="section-label">📝 步骤</div>' +
+        '<div class="section-value">' + stepsHtml + '</div>' +
+      '</div>' +
+      '<div class="card-section">' +
+        '<div class="section-label">🎒 所需材料</div>' +
+        '<div class="section-value">' + materialsHtml + '</div>' +
+      '</div>' +
+      '<div class="card-section">' +
+        '<div class="section-label">⚠️ 注意事项</div>' +
+        '<div class="section-value">' + tipsHtml + '</div>' +
+      '</div>' +
+      '<div style="display:flex;flex-wrap:wrap;gap:16px;margin-bottom:14px;">' +
+        '<div class="card-section" style="margin-bottom:0;">' +
+          '<div class="section-label">⏱ 预计耗时</div>' +
+          '<div class="section-value"><strong>' + escapeHtml(duration) + '</strong></div>' +
+        '</div>' +
+        '<div class="card-section" style="margin-bottom:0;">' +
+          '<div class="section-label">🌤️ 适合天气</div>' +
+          '<div class="section-value">' + escapeHtml(item.weather || item.suitableWeather || '不限') + '</div>' +
+        '</div>' +
+        '<div class="card-section" style="margin-bottom:0;">' +
+          '<div class="section-label">📍 适合地点</div>' +
+          '<div class="section-value">' + escapeHtml(item.location || item.suitableLocation || '不限') + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="tags-row">' +
+        '<span class="tag">' + (MOOD_EMOJI[moodKey] || '😊') + ' ' + escapeHtml(item.mood) + '</span>' +
+        '<span class="tag ' + (ENERGY_TAG_MAP[item.energy] || '') + '">⚡ ' + escapeHtml(item.energy) + '</span>' +
+        '<span class="tag">' + escapeHtml(item.category || '未分类') + '</span>' +
+        '<span class="tag">' + getSuitableTime(item.energy) + '</span>' +
+      '</div>' +
+    '</div>';
+
+  grid.querySelector('.single-card').__data = item;
+  updateNav();
+  navBar.style.display = 'flex';
+}
+
+function updateNav() {
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const progress = document.getElementById('navProgress');
+
+  progress.textContent = '第 ' + (currentIndex + 1) + ' 个 / 共 ' + results.length + ' 个';
+
+  if (results.length <= 1) {
+    prevBtn.classList.add('disabled');
+    nextBtn.disabled = true;
+    nextBtn.textContent = '没有更多了';
+    return;
+  }
+
+  if (currentIndex === 0) {
+    prevBtn.classList.add('disabled');
+  } else {
+    prevBtn.classList.remove('disabled');
+  }
+
+  if (currentIndex === results.length - 1) {
+    nextBtn.disabled = true;
+    nextBtn.textContent = '没有更多了';
+  } else {
+    nextBtn.disabled = false;
+    nextBtn.textContent = '下一个 ▶';
+  }
+}
+
+function prevCard() {
+  if (currentIndex <= 0) return;
+  const card = document.querySelector('.single-card');
+  if (card) {
+    card.classList.add('fade-out');
+    setTimeout(() => {
+      currentIndex--;
+      renderCurrentCard();
+    }, 150);
+  } else {
+    currentIndex--;
+    renderCurrentCard();
+  }
+}
+
+function nextCard() {
+  if (currentIndex >= results.length - 1) return;
+  const card = document.querySelector('.single-card');
+  if (card) {
+    card.classList.add('fade-out');
+    setTimeout(() => {
+      currentIndex++;
+      renderCurrentCard();
+    }, 150);
+  } else {
+    currentIndex++;
+    renderCurrentCard();
+  }
 }
 
 async function getRecommend() {
@@ -1255,14 +1409,16 @@ async function getRecommend() {
     recCount++;
     document.getElementById('recCount').textContent = recCount;
 
+    results = items;
+    currentIndex = 0;
+
     if (items.length === 0) {
       grid.innerHTML = '<div class="empty-state"><div class="icon">🔮</div>没有找到匹配的推荐活动</div>';
       grid.classList.add('empty');
+      document.getElementById('navBar').style.display = 'none';
     } else {
       grid.classList.remove('empty');
-      grid.innerHTML = items.map((item, i) => cardHTML(item, i)).join('');
-      grid.querySelectorAll('.rec-card').forEach((el, i) => { el.__data = items[i]; });
-      applyCategoryFilter();
+      renderCurrentCard();
     }
   } catch (err) {
     showError(err.message || '网络错误，请检查后端服务是否启动');
@@ -1272,15 +1428,11 @@ async function getRecommend() {
   }
 }
 
-async function getRandom() {
-  const errorEl = document.getElementById('errorMsg');
-  const grid = document.getElementById('resultsGrid');
-  const btn = document.getElementById('randomBtn');
-
-  errorEl.style.display = 'none';
-
+async function startBrowse() {
+  const btn = document.getElementById('browseBtn');
+  const originalText = btn.innerHTML;
   btn.disabled = true;
-  btn.textContent = '🎲 抽取中...';
+  btn.innerHTML = '🔄 加载中...';
 
   try {
     const res = await fetch('http://localhost:3001/api/random');
@@ -1290,21 +1442,46 @@ async function getRandom() {
     recCount++;
     document.getElementById('recCount').textContent = recCount;
 
-    if (!item) {
-      grid.innerHTML = '<div class="empty-state"><div class="icon">🔮</div>暂无活动数据</div>';
-      grid.classList.add('empty');
-      return;
-    }
-
-    grid.classList.remove('empty');
-    grid.innerHTML = cardHTML(item, 0);
-    grid.querySelector('.rec-card').__data = item;
+    results = [item];
+    currentIndex = 0;
+    document.getElementById('resultsGrid').classList.remove('empty');
+    renderCurrentCard();
+    document.getElementById('navBar').style.display = 'none';
   } catch (err) {
     showError(err.message || '网络错误，请检查后端服务是否启动');
   } finally {
     btn.disabled = false;
-    btn.textContent = '🎲 随机推荐';
+    btn.innerHTML = originalText;
   }
+}
+
+function quickEntry(type) {
+  const presets = {
+    happy: { mood: '开心', energy: '高', filters: { duration: '不限', weather: '晴天', location: '室外' } },
+    home: { mood: '疲惫', energy: '低', filters: { duration: '不限', weather: '不限', location: '在家' } },
+    vent: { mood: '焦虑', energy: '高', filters: { duration: '不限', weather: '不限', location: '室内' } },
+    challenge: { mood: '兴奋', energy: '高', filters: { duration: '不限', weather: '晴天', location: '室外' } }
+  };
+
+  const preset = presets[type];
+  if (!preset) return;
+
+  document.querySelectorAll('.tag-item').forEach(b => b.classList.remove('active'));
+
+  selectedMood = preset.mood;
+  document.querySelector('.tag-item[data-type="mood"][data-value="' + preset.mood + '"]')?.classList.add('active');
+
+  selectedEnergy = preset.energy;
+  document.querySelector('.tag-item[data-type="energy"][data-value="' + preset.energy + '"]')?.classList.add('active');
+
+  Object.keys(preset.filters).forEach(key => {
+    const val = preset.filters[key];
+    document.querySelectorAll('.tag-item[data-type="' + key + '"]').forEach(b => b.classList.remove('active'));
+    document.querySelector('.tag-item[data-type="' + key + '"][data-value="' + val + '"]')?.classList.add('active');
+    filters[key] = val;
+  });
+
+  getRecommend();
 }
 
 function showError(msg) {
